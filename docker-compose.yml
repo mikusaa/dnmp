@@ -1,0 +1,75 @@
+version: "3.9"
+services:
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./www:/home/wwwroot
+      - ./nginx/conf:/etc/nginx
+      - ./nginx/logs:/home/wwwlogs
+    environment:
+      - TZ=Asia/Shanghai
+    # labels:
+    #   - "sh.acme.autoload.domain=blog"
+    restart: unless-stopped
+    container_name: nginx
+
+  mysql:
+    image: mariadb:latest
+    ports:
+      - 3306:3306
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+    environment:
+      - TZ=Asia/Shanghai
+      - MYSQL_ROOT_PASSWORD=123456789
+    restart: unless-stopped
+    container_name: mysql
+
+  php:
+    build: ./php
+    volumes:
+      - ./www:/home/wwwroot
+      - ./php/php.ini:/usr/local/etc/php/php.ini
+    environment:
+      - TZ=Asia/Shanghai
+    user: 101:101
+    restart: unless-stopped
+    container_name: php
+
+  php8:
+    build: ./php8
+    volumes:
+      - ./www:/home/wwwroot
+      - ./php8/php.ini:/usr/local/etc/php/php.ini
+    environment:
+      - TZ=Asia/Shanghai
+    user: 101:101
+    restart: unless-stopped
+    container_name: php8
+
+  acme.sh:
+    image: neilpang/acme.sh
+    command: daemon
+    environment:
+      # - DEPLOY_DOCKER_CONTAINER_LABEL=sh.acme.autoload.domain=blog
+      # - DEPLOY_DOCKER_CONTAINER_KEY_FILE=
+      # - DEPLOY_DOCKER_CONTAINER_FULLCHAIN_FILE=
+      - DEPLOY_DOCKER_CONTAINER_RELOAD_CMD=nginx -s reload
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./acme.sh:/acme.sh
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+    container_name: acme.sh
+
+  redis:
+    image: redis:alpine
+    sysctls:
+      - net.core.somaxconn=1024
+    restart: unless-stopped
+    container_name: redis
+
