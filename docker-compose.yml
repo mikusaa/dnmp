@@ -40,16 +40,18 @@ services:
     restart: unless-stopped
     container_name: php
 
-  php8:
-    build: ./php8
-    volumes:
-      - ./www:/home/wwwroot
-      - ./php8/php.ini:/usr/local/etc/php/php.ini
-    environment:
-      - TZ=Asia/Shanghai
-    user: 101:101
-    restart: unless-stopped
-    container_name: php8
+
+## 如有需要可自行取消注释
+  # php8:
+  #   build: ./php8
+  #   volumes:
+  #     - ./www:/home/wwwroot
+  #     - ./php8/php.ini:/usr/local/etc/php/php.ini
+  #   environment:
+  #     - TZ=Asia/Shanghai
+  #   user: 101:101
+  #   restart: unless-stopped
+  #   container_name: php8
 
   acme.sh:
     image: neilpang/acme.sh
@@ -66,10 +68,10 @@ services:
     restart: unless-stopped
     container_name: acme.sh
 
-  redis:
-    image: redis:alpine
-    sysctls:
-      - net.core.somaxconn=1024
-    restart: unless-stopped
-    container_name: redis
+  # redis:
+  #   image: redis:alpine
+  #   sysctls:
+  #     - net.core.somaxconn=1024
+  #   restart: unless-stopped
+  #   container_name: redis
 
