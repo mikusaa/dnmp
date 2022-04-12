@@ -2,7 +2,7 @@
 
 Docker+nginx+php+mysql
 
-主要参考自[LNMP一键安装包](https://lnmp.org/)，还有 [Kong's Blog](https://jktu.cc/)。
+主要参考自[LNMP一键安装包](https://lnmp.org/)，离不开 [Kong's Blog](https://jktu.cc/) 大佬的帮助。
 
 就酱。
 
