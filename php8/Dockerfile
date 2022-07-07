@@ -1,4 +1,4 @@
-FROM php:7.4.27-fpm-alpine
+FROM php:8.1.7-fpm-alpine
 
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories \
     && apk update \
