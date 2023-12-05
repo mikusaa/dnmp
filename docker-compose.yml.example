@@ -1,0 +1,110 @@
+version: '3.9'
+services:
+
+  acme.sh:
+    image: neilpang/acme.sh:latest
+    container_name: acme.sh
+    command: daemon
+    environment:
+      - DEPLOY_DOCKER_CONTAINER_LABEL=sh.acme.autoload.domain=dnmp
+      - DEPLOY_DOCKER_CONTAINER_RELOAD_CMD=nginx -s reload
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./acme.sh:/acme.sh
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+    networks:
+      - dnmp
+
+  nginx:
+    image: nginx:mainline-alpine
+    container_name: nginx
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx:/etc/nginx:rw
+      - ./logs/nginx:/home/wwwlogs:rw
+      - ./cache:/home/wwwcache:rw
+      - ./www:/home/wwwroot:rw
+    environment:
+      - TZ=Asia/Shanghai
+    labels:
+      - sh.acme.autoload.domain=dnmp
+    restart: unless-stopped
+    networks:
+      - dnmp
+
+  mysql:
+    image: mariadb:latest
+    container_name: mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql/data:/var/lib/mysql/:rw
+    environment:
+      - TZ=Asia/Shanghai
+      - MYSQL_ROOT_PASSWORD=change_password_here #修改此处的密码
+      - MYSQL_ROOT_HOST=%
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+       max-size: "1g"
+    networks:
+      - dnmp
+
+  php80:
+    build: ./php/8
+    container_name: php80
+    environment:
+      - TZ=Asia/Shanghai
+      - USER_ID=1000
+      - GROUP_ID=1000
+      # - UMASK=000
+    volumes:
+      - ./www:/home/wwwroot:rw
+      - ./php/8/php.ini:/usr/local/etc/php/php.ini:ro
+      - ./php/8/php-fpm.conf:/usr/local/etc/php-fpm.d/www.conf:rw
+      - ./logs/php80:/usr/local/etc/php/log/
+    # user: 1000:1000
+    restart: unless-stopped
+    networks:
+      - dnmp
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    ports:
+      - 4380:80
+    volumes:
+      - ./phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php:ro
+      - ./phpmyadmin/php-phpmyadmin.ini:/usr/local/etc/php/conf.d/php-phpmyadmin.ini:ro
+      - ./phpmyadmin/upload:/etc/phpmyadmin/upload
+      - ./phpmyadmin/save:/etc/phpmyadmin/save
+    environment:
+      - PMA_HOST=mysql
+      - PMA_PORT=3306
+      - TZ=Asia/Shanghai
+      - UPLOAD_LIMIT=30M
+      # - PMA_ABSOLUTE_URI=
+    restart: unless-stopped
+    networks:
+      - dnmp
+
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --cleanup
+    restart: unless-stopped  
+    container_name: watchtower
+    networks:
+      - dnmp
+
+networks:
+  dnmp:
+    driver: bridge
+    ipam:
+      driver: dnmp
