@@ -76,8 +76,8 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     container_name: phpmyadmin
-    ports:
-      - 4380:80
+    # ports:
+    #   - 80:80
     volumes:
       - ./phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php:ro
       - ./phpmyadmin/php-phpmyadmin.ini:/usr/local/etc/php/conf.d/php-phpmyadmin.ini:ro
@@ -105,6 +105,4 @@ services:
 
 networks:
   dnmp:
-    driver: bridge
-    ipam:
-      driver: dnmp
+    external: true
