@@ -19,6 +19,7 @@ services:
   nginx:
     image: macbre/nginx-http3
     container_name: nginx
+    user: root:root
     ports:
       - 80:80
       - "443:443/tcp"
