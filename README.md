@@ -44,7 +44,9 @@ docker compose up -d
 
 ### Nginx
 
-nginx 这里我预创建了一个 `ssl.conf` 配置文件，里面包含了基础通用的 SSL 配置，包括启用 `http2` 以及 `quic`，但还是需要手动创建俩文件，一个是 `dhparam.pem`，一个是 `ticket.key` 。
+nginx 使用的是包含了 `QUIC`、`HTTP/3`、`Google's brotli compression` 的版本，非官方版。具体可以参考[官方文档](https://hub.docker.com/r/macbre/nginx-http3)。
+
+这里我预创建了一个 `ssl.conf` 配置文件，里面包含了基础通用的 SSL 配置，包括启用 `http2` 以及 `quic`，但还是需要手动创建俩文件，一个是 `dhparam.pem`，一个是 `ticket.key` 。
 
 进入 `ssl` 目录：
 
