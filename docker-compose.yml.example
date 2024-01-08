@@ -17,15 +17,22 @@ services:
       - dnmp
 
   nginx:
-    image: nginx:mainline-alpine
+    image: macbre/nginx-http3
     container_name: nginx
     ports:
       - 80:80
-      - 443:443
+      - "443:443/tcp"
+      - "443:443/udp"
     volumes:
-      - ./nginx:/etc/nginx:rw
-      - ./logs/nginx:/home/wwwlogs:rw
-      - ./cache:/home/wwwcache:rw
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:rw
+      - ./nginx/ssl:/etc/nginx/ssl:rw
+      - ./nginx/rewrite:/etc/nginx/rewrite:ro
+      - ./nginx/enable-php80.conf:/etc/nginx/enable-php80.conf:ro
+      - ./nginx/enable-php80-pathinfo.conf:/etc/nginx/enable-php80-pathinfo.conf:ro
+      - ./nginx/pathinfo.conf:/etc/nginx/pathinfo.conf:ro
+      - ./logs/nginx:/home/wwwlogs
+      - ./logs/cache:/home/wwwcache
       - ./www:/home/wwwroot:rw
     environment:
       - TZ=Asia/Shanghai
