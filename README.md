@@ -74,3 +74,10 @@ server {
     #其他省略
 }
 ```
+至于 `nginx.conf` 配置文件，这个容器添加了 [headers-more-nginx-module](https://github.com/openresty/headers-more-nginx-module#readme) 第三方模块用于清除 `headers` 避免遭到攻击什么的。但实际使用过程中发现，原 `nginx.conf` 配置文件中默认添加的
+
+```nginx
+more_set_headers "Content-Security-Policy: object-src 'none'; frame-ancestors 'self'; form-action 'self'; block-all-mixed-content; sandbox allow-forms allow-same-origin allow-scripts allow-popups allow-downloads; base-uri 'self';";
+```
+
+会导致 Typecho 无法正常使用。故禁用了部分配置。
