@@ -12,6 +12,8 @@ Docker+Nginx+MySql+PHP，即「DNMP」。
 
 ## 这玩意要怎么用？
 
+### 启动
+
 首先，你需要安装 Docker 和 Docker compose，才能使用这个玩意。
 
 其次，你需要对 Docker、Nginx、PHP、phpMyAdmin 相关配置有一定了解。Docker 可以参考 [Docker 从入门到实践](https://yeasy.gitbook.io/docker_practice/)。
@@ -39,3 +41,34 @@ cp docker-compose.yml.example docker-compose.yml
 docker compose up -d
 ```
 如果机器很好的话，等待个把分钟编译完 PHP，容器就能正常启动并使用了。
+
+### Nginx
+
+nginx 这里我预创建了一个 `ssl.conf` 配置文件，里面包含了基础通用的 SSL 配置，包括启用 `http2` 以及 `quic`，但还是需要手动创建俩文件，一个是 `dhparam.pem`，一个是 `ticket.key` 。
+
+进入 `ssl` 目录：
+
+```bash
+cd dnmp/nginx/ssl
+```
+使用 openssl 创建这两个文件：
+```bash
+openssl dhparam -out dhparam.pem 2048
+openssl rand 80 > ticket.key
+```
+
+这样你就可以在配置域名的时候，直接使用 `ssl` 目录下的 `ssl.conf` 配置文件了。
+
+```nginx
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    listen 443 quic ;
+    listen [::]:443 quic ;
+    server_name www.himiku.com;
+    ssl_certificate_key ssl/himiku.com/himiku.com.key;
+    ssl_certificate ssl/himiku.com/fullchain.cer;
+    include ssl/ssl.conf;
+    #其他省略
+}
+```
