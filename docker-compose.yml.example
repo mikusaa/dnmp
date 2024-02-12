@@ -7,6 +7,8 @@ services:
     command: daemon
     environment:
       - DEPLOY_DOCKER_CONTAINER_LABEL=sh.acme.autoload.domain=dnmp
+      # - DEPLOY_DOCKER_CONTAINER_KEY_FILE=""
+      # - DEPLOY_DOCKER_CONTAINER_FULLCHAIN_FILE=""
       - DEPLOY_DOCKER_CONTAINER_RELOAD_CMD=nginx -s reload
       - TZ=Asia/Shanghai
     volumes:
