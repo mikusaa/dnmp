@@ -32,8 +32,8 @@ services:
       - ./nginx/enable-php80.conf:/etc/nginx/enable-php80.conf:ro
       - ./nginx/enable-php80-pathinfo.conf:/etc/nginx/enable-php80-pathinfo.conf:ro
       - ./nginx/pathinfo.conf:/etc/nginx/pathinfo.conf:ro
-      - ./logs/nginx:/home/wwwlogs
-      - ./logs/cache:/home/wwwcache
+      - ./nginx/logs:/home/wwwlogs
+      - ./nginx/cache:/home/wwwcache
       - ./www:/home/wwwroot:rw
     environment:
       - TZ=Asia/Shanghai
