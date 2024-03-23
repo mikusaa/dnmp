@@ -1,4 +1,4 @@
-FROM php:8.3.0-fpm-alpine3.18
+FROM php:8.3.3-fpm-alpine3.18
 #使用镜像加速github下载，如果服务器不在国内，可以删除 https://mirror.ghproxy.com/
 ADD https://mirror.ghproxy.com/https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
