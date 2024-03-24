@@ -41,13 +41,14 @@ services:
       - dnmp
 
   mysql:
-    image: mariadb:latest
+    image: mariadb:11.2.3 #固定版本，数据库这种东西怎么能随便更新呢？
+    user: 1000:1000
     container_name: mysql
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     ports:
       - 3306:3306
     volumes:
-      - ./mysql/data:/var/lib/mysql/:rw
+      - ./mariadb/data:/var/lib/mysql/:rw
     environment:
       - TZ=Asia/Shanghai
       - MYSQL_ROOT_PASSWORD=change_password_here #修改此处的密码
