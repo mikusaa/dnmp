@@ -1,3 +1,4 @@
+![Docker Pulls](https://img.shields.io/docker/pulls/mikusa/php)
 ![Tianji Visitor](https://status.himiku.com/telemetry/clnzoxcy10001vy2ohi4obbi0/clu5muup80r0jmb4g3fbsx5gm/badge.svg)
 # dnmp
 
