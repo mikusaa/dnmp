@@ -1,6 +1,4 @@
-version: '3.9'
 services:
-
   acme.sh:
     image: neilpang/acme.sh:latest
     container_name: acme.sh
@@ -25,7 +23,7 @@ services:
     ports:
       - 80:80
       - "443:443/tcp"
-      - "443:443/udp"
+      # - "443:443/udp" #若需使用quic，取消该端口的注释
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:rw
@@ -63,7 +61,7 @@ services:
       - dnmp
 
   php:
-    image: mikusa/docker-php:8.3.3
+    image: mikusa/docker-php:latest
     container_name: php
     user: 1000:1000
     environment:

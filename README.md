@@ -40,7 +40,6 @@ cp docker-compose.yml.example docker-compose.yml
 ```bash
 docker compose up -d
 ```
-如果机器很好的话，等待个把分钟编译完 PHP，容器就能正常启动并使用了。
 
 ### Nginx
 
@@ -59,7 +58,7 @@ openssl dhparam -out dhparam.pem 2048
 openssl rand 80 > ticket.key
 ```
 
-这样你就可以在配置域名的时候，直接使用 `ssl` 目录下的 `ssl.conf` 配置文件了。
+这样你就可以在配置域名的时候，直接使用 `ssl` 目录下的 `ssl.conf` 和 `quic.conf` 配置 HTTPS 部分了。
 
 ```nginx
 server {
@@ -71,6 +70,7 @@ server {
     ssl_certificate_key ssl/himiku.com/himiku.com.key;
     ssl_certificate ssl/himiku.com/fullchain.cer;
     include ssl/ssl.conf;
+    include ssl/quic.conf; #鉴于国内网络对quic的支持极差，这一段配置单独列出
     #其他省略
 }
 ```
