@@ -1,4 +1,5 @@
-## 自用 dnmp
+![Tianji Visitor](https://status.himiku.com/telemetry/clnzoxcy10001vy2ohi4obbi0/clu5muup80r0jmb4g3fbsx5gm/badge.svg)
+# dnmp
 
 Docker+Nginx+MySql+PHP，即「DNMP」。
 
@@ -30,7 +31,7 @@ cd dnmp
 ```
 由于指定使用了名为 `dnmp` 的网络，所以咱需要先创建一个 docker 网络：
 ```bash
-docker network create dnmp
+docker network create -d bridge dnmp
 ```
 复制一份配置文件：
 ```bash
