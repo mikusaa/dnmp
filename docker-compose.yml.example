@@ -4,11 +4,11 @@ services:
     container_name: acme.sh
     command: daemon
     environment:
-      - DEPLOY_DOCKER_CONTAINER_LABEL=sh.acme.autoload.domain=dnmp
+      - DEPLOY_DOCKER_CONTAINER_LABEL=${ACME_LABLE}
       # - DEPLOY_DOCKER_CONTAINER_KEY_FILE=""
       # - DEPLOY_DOCKER_CONTAINER_FULLCHAIN_FILE=""
       - DEPLOY_DOCKER_CONTAINER_RELOAD_CMD=nginx -s reload
-      - TZ=Asia/Shanghai
+      - TZ=${TZ}
     volumes:
       - ./acme.sh:/acme.sh
       - /var/run/docker.sock:/var/run/docker.sock
@@ -33,24 +33,24 @@ services:
       - ./nginx/cache:/home/wwwcache:rw
       - ./www:/home/wwwroot:rw
     environment:
-      - TZ=Asia/Shanghai
+      - TZ=${TZ}
     labels:
-      - sh.acme.autoload.domain=dnmp
+      - ${ACME_LABLE}
     restart: unless-stopped
     networks:
       - dnmp
 
   mysql:
     image: mariadb:11.2.3 #固定版本，数据库这种东西怎么能随便更新呢？
-    user: 1000:1000
+    user: ${PUID}:${PGID}
     container_name: mysql
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    ports:
-      - 3306:3306
+    # ports:
+    #   - 3306:3306
     volumes:
       - ./mariadb/data:/var/lib/mysql/:rw
     environment:
-      - TZ=Asia/Shanghai
+      - TZ=${TZ}
       - MYSQL_ROOT_PASSWORD=change_password_here #修改此处的密码
       - MYSQL_ROOT_HOST=%
     restart: unless-stopped
@@ -64,9 +64,9 @@ services:
   php:
     image: mikusa/docker-php:latest
     container_name: php
-    user: 1000:1000
+    user: ${PUID}:${PGID}
     environment:
-      - TZ=Asia/Shanghai
+      - TZ=${TZ}
     volumes:
       - ./www:/home/wwwroot:rw
       - ./php/php.ini:/usr/local/etc/php/php.ini:ro
@@ -89,22 +89,22 @@ services:
     environment:
       - PMA_HOST=mysql
       - PMA_PORT=3306
-      - TZ=Asia/Shanghai
+      - TZ=${TZ}
       - UPLOAD_LIMIT=30M
       # - PMA_ABSOLUTE_URI=
     restart: unless-stopped
     networks:
       - dnmp
 
-  watchtower:
-    image: containrrr/watchtower
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    command: --cleanup
-    restart: unless-stopped  
-    container_name: watchtower
-    networks:
-      - dnmp
+  # watchtower:
+  #   image: containrrr/watchtower
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   command: --cleanup
+  #   restart: unless-stopped  
+  #   container_name: watchtower
+  #   networks:
+  #     - dnmp
 
 networks:
   dnmp:
