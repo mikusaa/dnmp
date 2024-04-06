@@ -11,6 +11,8 @@ Docker+Nginx+MySql+PHP，即「DNMP」。
 
 ~~一把梭真的很快乐！~~
 
+后续文档更新，将在博客上发布
+
 ## 这玩意要怎么用？
 
 ### 启动
@@ -135,14 +137,15 @@ openssl rand 80 > ticket.key
 ```nginx
 server {
     listen 443 ssl;
-    listen [::]:443 ssl;
-    listen 443 quic ;
-    listen [::]:443 quic ;
-    server_name www.himiku.com;
-    ssl_certificate_key ssl/himiku.com/himiku.com.key;
-    ssl_certificate ssl/himiku.com/fullchain.cer;
+    # listen 443 quic; #鉴于国内网络对quic的支持极差，不建议使用
+    # 国内机子同时支持IPv4、IPv6的太少，如果有可取消注释
+    # listen [::]:443 ssl;
+    # listen [::]:443 quic;
+    server_name www.xxx.com xxx.com;
+    ssl_certificate_key ssl/xxx.com/xxx.com.key;
+    ssl_certificate ssl/xxx.com/fullchain.cer;
     include ssl/ssl.conf;
-    include ssl/quic.conf; #鉴于国内网络对quic的支持极差，这一段配置单独列出
+    # include ssl/quic.conf; #鉴于国内网络对quic的支持极差，这一段配置单独列出，选择使用
     #其他省略
 }
 ```
