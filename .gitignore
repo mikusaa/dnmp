@@ -1,2 +1,5 @@
 docker-compose.yml
 docker-compose.yml.*
+compose.*.yml
+typecho/
+.env
