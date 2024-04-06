@@ -19,7 +19,7 @@ services:
   nginx:
     image: macbre/nginx-http3
     container_name: nginx
-    user: root:root
+    user: root:root #使用root运行，否则无法直接绑定80、443端口
     ports:
       - 80:80
       - "443:443/tcp"
@@ -51,7 +51,7 @@ services:
       - ./mariadb/data:/var/lib/mysql/:rw
     environment:
       - TZ=${TZ}
-      - MYSQL_ROOT_PASSWORD=change_password_here #修改此处的密码
+      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_ROOT_HOST=%
     restart: unless-stopped
     logging:
