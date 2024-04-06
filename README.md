@@ -113,7 +113,7 @@ ACME_FULLCHAIN_FILE=/etc/nginx/ssl/example.com/fullchain.cer
 `example.com` 批量替换为你自己的域名即可。
 
 
-### Nginx
+## Nginx
 
 nginx 使用的是包含了 `QUIC`、`HTTP/3`、`Google's brotli compression` 的版本，非官方版。具体可以参考[官方文档](https://hub.docker.com/r/macbre/nginx-http3)。
 
@@ -164,3 +164,13 @@ docker exec nginx nginx -t
 ```
 docker exec nginx nginx -s reload
 ```
+
+## php
+
+php构建的话，如果机子、网络都很差会构建半天。索性发布到 DockerHub 上去了。
+
+https://hub.docker.com/r/mikusa/docker-php
+
+当前只支持 `linux/amd64` ，~~因为是 PC 构建然后上传的~~ 。
+
+`latest` 目前为最新版本 8.3.4，其余都有版本标签，可自由选择使用。
